@@ -1,0 +1,38 @@
+name: KORAmorb
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base
+  - r-essentials
+  - r-tidyverse
+  - r-tibble
+  - r-xtable
+  - r-cowplot
+  - r-stringr
+  - r-scales
+  - r-ggrepel
+  - r-ggpubr
+  - r-rcolorbrewer
+  - r-devtools
+  - bioconductor-reactome.db
+  - bioconductor-fgsea
+  - r-proc
+  - r-robustrankaggreg
+  - bioconductor-globaltest
+  - bioconductor-snpstats
+  - r-caret
+  - r-caretensemble
+  - r-haven
+  - bioconductor-limma
+  - r-glmnet
+  - r-proc
+  - r-glmnetutils
+  - r-dmwr
+  - r-mlmetrics
+  - r-randomforest
+  - r-kernlab
+  - r-nnls
+  - r-catools
+  - r-optparse
+  - r-themis
