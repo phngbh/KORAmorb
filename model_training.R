@@ -11,8 +11,8 @@ library(glmnetUtils)
 library(DMwR)
 library(MLmetrics)
 library(randomForest)
-library(xgboost)
-library(mlrMBO)
+#library(xgboost)
+#library(mlrMBO)
 library(kernlab)
 library(nnls)
 library(caTools)
@@ -585,7 +585,7 @@ fit_forwardSelectFromClinical = function(
   cat("Iterate through combinations\n")
   for (j in 1:length(comb_list)){
     
-    cat("Evaluate combinations of ",j, " modality\n")
+    cat("Evaluate combinations of ",j + 1, " modality\n")
     perf_j = list(roc = list(), pr = list(), ll = list())
     
     #Filter for combinations that involve best performing modality in the previously smaller combination 
@@ -626,6 +626,7 @@ fit_forwardSelectFromClinical = function(
       perf_j$roc[[d]] = unlist(roc_d) %>% median()
       perf_j$pr[[d]] = unlist(pr_d) %>% median()
       perf_j$ll[[d]] = unlist(ll_d) %>% median()
+      cat("......Median prediction performance on test sets: AUROC: ",perf_j$roc[[d]],", AUPRC: ", perf_j$pr[[d]], " & weighted log loss: ",perf_j$ll[[d]],"\n")
     }
     
     if (p_metric == "AUROC"){
@@ -642,11 +643,15 @@ fit_forwardSelectFromClinical = function(
     perf_validate[[j]] = data.frame(Complexity = paste0(j+1,"_modality"), Model = paste0(c("Clinical",best_d), collapse = ""), Value = c(perf_j$roc[[best_ind]],perf_j$pr[[best_ind]],perf_j$ll[[best_ind]]), Type = c("AUROC","AUPRC","Weighted LogLoss"))
     
     cat("...Evaluating on outer test set\n")
-    x_train_i = do.call(cbind, data_list[comb_list_fil[[best_ind]]])[cv_list$outer$train[[i]],] %>% as.data.frame()
+    x_train_i = do.call(cbind, data_list[c("Clinical",comb_list_fil[[best_ind]])])[cv_list$outer$train[[i]],] %>% as.data.frame()
+    cat("......Check if clinical variables are in the train set: ")
+    print(any(colnames(data_list$Clinical) %in% colnames(x_train_i)))
     if (ncol(x_train_i) == 1){
       x_train_i <- cbind(x_train_i, ranv = 0)
     }
-    x_test_i = do.call(cbind, data_list[comb_list_fil[[best_ind]]])[cv_list$outer$test[[i]],] %>% as.data.frame()
+    x_test_i = do.call(cbind, data_list[c("Clinical",comb_list_fil[[best_ind]])])[cv_list$outer$test[[i]],] %>% as.data.frame()
+    cat("......Check if clinical variables are in the test set: ")
+    print(any(colnames(data_list$Clinical) %in% colnames(x_test_i)))
     if (ncol(x_test_i) == 1){
       x_test_i <- cbind(x_test_i, ranv = 0)
     }

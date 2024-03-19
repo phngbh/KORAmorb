@@ -92,8 +92,8 @@ cv_list <- make_cv_list(outcome = as.factor(outcome))
 cat("Train and evaluate models\n")
 outcome <- ifelse(outcome == 1, "One", "Zero") %>% factor(levels = c("One","Zero"))
 if (integration == "FFS"){
-  res <- fit_forwardSelect(data_list = input_data, y = outcome, cv_list = cv_list, p_metric = p_metric, algorithm = algorithm, n = iter)
-  saveRDS(res,file.path(outdir, paste0(paste(outcome_name,integration,algorithm,p_metric,features,iter,sep = "_"),".rds")))
+  #res <- fit_forwardSelect(data_list = input_data, y = outcome, cv_list = cv_list, p_metric = p_metric, algorithm = algorithm, n = iter)
+  #saveRDS(res,file.path(outdir, paste0(paste(outcome_name,integration,algorithm,p_metric,features,iter,sep = "_"),".rds")))
   res <- fit_forwardSelectFromClinical(data_list = input_data, y = outcome, cv_list = cv_list, p_metric = p_metric, algorithm = algorithm, n = iter)
   saveRDS(res,file.path(outdir, paste0(paste(outcome_name,integration,algorithm,p_metric,features,iter,"fromClinical",sep = "_"),".rds")))
 } else if (integration == "ensemble") {
